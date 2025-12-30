@@ -1,0 +1,15 @@
+# DO NOT REMOVE THIS LINE AND THE LINES BELLOW SSL_REDIRECT:academiadefutbolfusionbrasilialiberia.com
+RewriteEngine on
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} (www\.)?academiadefutbolfusionbrasilialiberia.com
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+ErrorDocument 404 https://academiadefutbolfusionbrasilialiberia.com/error/
+
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+SetEnv ENVIRONMENT produccion 
+
+#Regla de reescritura
+RewriteRule ^(.*)/(.*) index.php?controller=$1&action=$2

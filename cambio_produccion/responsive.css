@@ -1,0 +1,53 @@
+       /* === MODO RESPONSIVO PARA CELULARES === */
+       @media (max-width: 480px) {
+           /* El menú se convierte en columna y se oculta por defecto */
+
+           #logo {
+               margin-left: 0px;
+           }
+
+           nav#menu ul {
+               flex-direction: column;
+               position: absolute;
+               top: 80px;
+               left: 0;
+               width: 100%;
+               background-color: #005266;
+               display: none;
+               text-align: center;
+               padding: 20px 0;
+               gap: 20px;
+               border-top: 3px solid #FFD700;
+               /* Línea dorada decorativa */
+           }
+
+           #menu ul li {
+               font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif, Verdana, Geneva, Tahoma, sans-serif, serif, Helvetica, sans-serif;
+               letter-spacing: 3px;
+               line-height: 12px;
+           }
+
+           /* Cuando el menú se activa (se muestra) */
+           nav#menu ul.active {
+               display: flex;
+               animation: fadeIn 0.3s ease-in-out;
+           }
+
+           /* Muestra el icono de menú */
+           #menuToggle {
+               display: block;
+           }
+       }
+
+       /* === ANIMACIÓN DE APARICIÓN DEL MENÚ === */
+       @keyframes fadeIn {
+           from {
+               opacity: 0;
+               transform: translateY(-10px);
+           }
+
+           to {
+               opacity: 1;
+               transform: translateY(0);
+           }
+       }
