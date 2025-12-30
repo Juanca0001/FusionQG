@@ -18,11 +18,11 @@
 </select>
 
 
-<label>Monto (opcional)</label>
+<label>Monto </label>
 <input type="number" name="monto" step="0.01">
 
 
-<label>Mensaje</label>
+<label>Mensaje (opcional)</label>
 <textarea name="mensaje" rows="4"></textarea>
 
 
