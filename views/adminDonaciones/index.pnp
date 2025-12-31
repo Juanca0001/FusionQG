@@ -1,0 +1,32 @@
+
+php?> git
+<h1>Donaciones</h1>
+
+<p><strong>Total recaudado:</strong> $<?= number_format($total,2); ?></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Donante</th>
+            <th>Email</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th>Referencia</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($donaciones as $d): ?>
+        <tr>
+            <td><?= $d['id']; ?></td>
+            <td><?= htmlspecialchars($d['nombre']); ?></td>
+            <td><?= htmlspecialchars($d['email']); ?></td>
+            <td>$<?= number_format($d['monto'],2); ?></td>
+            <td><?= ucfirst($d['estado']); ?></td>
+            <td><?= $d['referencia_pago'] ?? '-'; ?></td>
+            <td><?= $d['created_at']; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
