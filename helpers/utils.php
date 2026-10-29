@@ -11,28 +11,74 @@ class Utils {
         return $name;
     }
 
-   // Método estático que valida si el usuario actual es administrador
-public static function isAdmin() {
-    
-    // Verifica si en la sesión NO existe la variable 'admin'
-    // Esto significa que el usuario no tiene permisos de administrador
-    if (!isset($_SESSION['admin'])) {
-        var_dump('entra');
-        die();
-        // Si no es admin, se redirige al usuario a la página principal
-        header("Location:" . BASE_URL);
-    } else {
-        // Si sí está definido 'admin', retorna true y permite continuar
+    // El rol proviene de la sesión creada después de verificar la contraseña.
+    public static function hasRole($role) {
+        return isset($_SESSION['identity']) && is_object($_SESSION['identity'])
+            && isset($_SESSION['identity']->rol) && $_SESSION['identity']->rol === $role;
+    }
+
+    public static function canManageUser($id) {
+        if (filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) === false) {
+            return false;
+        }
+        return isset($_SESSION['identity']->id)
+            && (self::hasRole('admin') || (int) $_SESSION['identity']->id === (int) $id);
+    }
+
+    public static function denyAccess() {
+        http_response_code(403);
+        exit('No tienes permiso para acceder a esta sección.');
+    }
+
+    public static function isAdmin() {
+        return self::requireRole('admin');
+    }
+
+    public static function requireRole($role) {
+        self::isIdentity();
+        if (!self::hasRole($role)) {
+            self::denyAccess();
+        }
         return true;
     }
-}
-
 
     public static function isIdentity() {
-        if (!isset($_SESSION['identity'])) {
-            header("Location:" . BASE_URL);
-        } else {
-            return true;
+        if (!isset($_SESSION['identity']) || !is_object($_SESSION['identity'])) {
+            header('Location: ' . BASE_URL . 'usuario/ingreso');
+            exit();
+        }
+        return true;
+    }
+
+    // index.php ejecuta esta política antes de enviar HTML al navegador.
+    public static function authorizeRoute($controller, $action) {
+        $controller = strtolower($controller);
+        $action = strtolower($action);
+        $roles = ['admin' => 'admin', 'categoria' => 'admin', 'profesor' => 'profesor',
+            'jugador' => 'jugador', 'responsable' => 'responsable'];
+        if (isset($roles[$controller])) {
+            self::requireRole($roles[$controller]);
+        }
+        if ($controller !== 'usuario') {
+            return;
+        }
+        if (in_array($action, ['gestion', 'crear', 'crearnuevo', 'save', 'eliminar'], true)) {
+            self::isAdmin();
+        }
+        if (in_array($action, ['perfil', 'cambiarpassword', 'editar', 'actualizar', 'updatepassword'], true)) {
+            self::isIdentity();
+        }
+        if (in_array($action, ['editar', 'actualizar', 'updatepassword'], true)) {
+            $id = $action === 'editar' ? ($_GET['id'] ?? null) : ($_POST['id'] ?? null);
+            if (!self::canManageUser($id)) {
+                self::denyAccess();
+            }
+            if ($action === 'actualizar' && !self::hasRole('admin')) {
+                $_POST['rol'] = $_SESSION['identity']->rol;
+            }
+            if ($action === 'updatepassword' && (int) $id !== (int) $_SESSION['identity']->id) {
+                self::denyAccess();
+            }
         }
     }
 

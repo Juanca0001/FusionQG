@@ -29,8 +29,6 @@ class UsuarioController {
 
     public function gestion() {
         Utils::isAdmin();
-        var_dump(Utils::isAdmin());
-        die();
         $usuario = new Usuario();
         $usuarios = $usuario->getAll();
         require_once 'views/usuario/gestion.php';
@@ -43,6 +41,7 @@ class UsuarioController {
     }
 
     public function crearNuevo() {
+        Utils::isAdmin();
         // Validar que el formulario fue enviado por POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -59,6 +58,13 @@ class UsuarioController {
                 $usuario->setApellido($apellido);
                 $usuario->setEmail($email);
                 $usuario->setPassword(password_hash($password, PASSWORD_DEFAULT)); // Encriptar
+
+                $rol = $_POST['rol'] ?? '';
+                if (!in_array($rol, ['admin', 'profesor', 'jugador', 'responsable', 'otro'], true)) {
+                    http_response_code(422);
+                    exit('Selecciona un rol válido.');
+                }
+                $usuario->setRol($rol);
 
                 $existe = $usuario->existe();
 
@@ -121,6 +127,11 @@ class UsuarioController {
             $email = $_POST['email'] ?? false;
             $password = $_POST['password'] ?? false;
             $rol = $_POST['rol'] ?? false;
+
+            if (!in_array($rol, ['admin', 'profesor', 'jugador', 'responsable', 'otro'], true)) {
+                http_response_code(422);
+                exit('Selecciona un rol válido.');
+            }
 
             // Validación básica
             if ($nombre && $apellido && $email && $password && $rol) {
@@ -213,6 +224,11 @@ class UsuarioController {
             $email = $_POST['email'];
             $rol = $_POST['rol'];
 
+            if (!in_array($rol, ['admin', 'profesor', 'jugador', 'responsable', 'otro'], true)) {
+                http_response_code(422);
+                exit('Selecciona un rol válido.');
+            }
+
             $usuario = new Usuario();
             $usuario->setId($id);
             $usuario->setNombre($nombre);
@@ -259,7 +275,7 @@ class UsuarioController {
     }
 
     public function login() {
-        if (isset($_POST)) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['password'])) {
             //IDENTIFICAR AL USUARIO
             //CONSULTA A LA BASE DE DATOS 
             $usuario = new Usuario();
@@ -276,16 +292,13 @@ class UsuarioController {
             try {
                 //CREAR UNA SESION 
                 if ($identity && is_object($identity)) {
+                    session_regenerate_id(true);
                     //identidad del usuario identificado
                     $_SESSION['identity'] = $identity;
 
                     if ($identity->rol == 'admin' || $identity->rol == 'jugador' || $identity->rol == 'profesor' ||
                             $identity->rol == 'responsable') {
-                        if ($identity->rol == 'responsable') {
-                            $_SESSION['identity']->rol = 'Señor';
-                        }elseif($identity->rol =='admin'){
-                            $_SESSION['identity']->rol = 'admin';
-                        }
+                        // Conservar el rol técnico; el saludo pertenece a la vista.
                         echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
                       <script>
                         Swal.fire({

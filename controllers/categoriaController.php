@@ -6,8 +6,6 @@ class CategoriaController {
 
     public function gestion() {
         Utils::isAdmin(); // si tienes middleware de admin
-        var_dump(isAdmin);
-        die();
         $categoria = new Categoria();
         $categorias = $categoria->getAll();
         require_once 'views/categoria/gestion.php';

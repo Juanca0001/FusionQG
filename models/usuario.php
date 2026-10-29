@@ -144,8 +144,6 @@ class Usuario {
     public function getAll() {
         $sql = "SELECT * FROM usuarios ORDER BY id DESC";
         $usuarios = $this->db->query($sql);
-        var_dump($usuarios);
-        die();
         if ($usuarios) {
             return $usuarios; // Devuelve un objeto mysqli_result (para fetch_object en la vista)
         } else {

@@ -1,6 +1,7 @@
 <IfModule mod_rewrite.c>
 # Activar rewrite 
 RewriteEngine on
+RewriteRule (^|/)\. - [F,L]
 ErrorDocument 404 http://localhost:8080/FusionBrasilia/error/
 
 RewriteCond %{SCRIPT_FILENAME} !-d
