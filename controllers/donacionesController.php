@@ -1,18 +1,52 @@
 <?php
-require_once '../app/Models/Donacion.php';
-require_once '../app/Middleware/AdminMiddleware.php';
+class DonationController {
 
-class DonacionesController {
-
+    /**
+     * Muestra el formulario de donación
+     */
     public function index() {
-        AdminMiddleware::handle();
+        require '../app/views/donations/index.php';
+    }
 
-        global $pdo;
-        $donacionModel = new Donacion($pdo);
+    /**
+     * Procesa el formulario
+     */
+    public function create() {
 
-        $donaciones = $donacionModel->obtenerTodas();
-        $total = $donacionModel->totalRecaudado();
+        // 1️⃣ Validar monto
+        $amount = filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_FLOAT);
 
-        require '../app/Views/admin/donaciones/index.php';
+        if (!$amount || $amount < 1) {
+            die("Monto inválido");
+        }
+
+        // 2️⃣ Crear orden en PayPal
+        $paypal = new PayPalService();
+        $order = $paypal->createOrder($amount);
+
+        // 3️⃣ Guardar en base de datos
+        $donationModel = new Donation();
+        $donationModel->create(
+            $_POST['name'] ?? null,
+            $_POST['email'] ?? null,
+            $amount,
+            $order->id
+        );
+
+        // 4️⃣ Redirigir al usuario a PayPal
+        foreach ($order->links as $link) {
+            if ($link->rel === "approve") {
+                header("Location: " . $link->href);
+                exit;
+            }
+        }
+    }
+
+    public function success() {
+        require '../app/views/donations/success.php';
+    }
+
+    public function cancel() {
+        require '../app/views/donations/cancel.php';
     }
 }

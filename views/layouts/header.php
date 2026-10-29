@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Fusion Quebrada Grande</title>
+        <title>Academia de Fútbol FQG</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="<?= BASE_URL ?>assets/img/logoQG.png">
         <link rel="stylesheet" type="text/css" href="<?= BASE_URL ?>assets/css/styles.css"/>
         <link rel="stylesheet" type="text/css" href="<?= BASE_URL ?>assets/css/responsive.css"/>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

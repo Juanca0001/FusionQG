@@ -21,7 +21,7 @@
 <section id="sobre-nosotros">
     <h2>Academia De Fútbol Fusión Quebrada Grande</h2>
     <p>
-Acerca de Nosotros – Academia de Fútbol Fusión Quebrada Grande
+Acerca de Nosotros – Academia de Fútbol Fusión Quebrada Grande 
 
 En la Academia de Fútbol Fusión Quebrada Grande creemos que el fútbol es mucho más que un deporte: es una herramienta de transformación social, disciplina y crecimiento personal. Nacimos con la visión de ofrecer a niños y jóvenes de nuestra comunidad un espacio seguro, formativo y motivador donde puedan desarrollar su talento, fortalecer sus valores y construir un futuro lleno de oportunidades.
 <br>
@@ -59,17 +59,17 @@ Nuestra misión es formar personas íntegras y deportistas preparados para enfre
     <h2>Programas / Categorías</h2>
     <div class="cards">
         <div class="card">
-            <h3>Sub-10</h3>
+            <h3>Novena</h3>
             <p>Entrenamientos básicos, introducción a la técnica y diversión.</p>
             <p><strong>Horario:</strong> Lunes y Miércoles 4:00 pm - 5:30 pm</p>
         </div>
         <div class="card">
-            <h3>Sub-9</h3>
+            <h3>Octava</h3>
             <p>Desarrollo técnico-táctico, trabajo en equipo y disciplina.</p>
             <p><strong>Horario:</strong> Martes y Jueves 5:00 pm - 6:30 pm</p>
         </div>
         <div class="card">
-            <h3>Sub-8</h3>
+            <h3>Séptima</h3>
             <p>Preparación avanzada, rendimiento físico y competencias.</p>
             <p><strong>Horario:</strong> Viernes 6:00 pm - 8:00 pm</p>
         </div>

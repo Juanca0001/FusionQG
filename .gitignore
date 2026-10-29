@@ -1,0 +1,14 @@
+# Configuración privada de cada computadora
+.env
+.env.*
+!.env.example
+config/.env
+nbproject/private/
+
+# Dependencias y archivos temporales
+vendor/
+node_modules/
+*.log
+*.bak
+/backups/
+/tmp/
